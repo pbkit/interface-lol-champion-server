@@ -1,0 +1,89 @@
+// This file was created under Riot Games' "Legal Jibber Jabber" policy
+// using assets owned by Riot Games.
+// Riot Games does not endorse or sponsor this project.
+// https://www.riotgames.com/en/legal
+syntax = "proto3";
+package pbkit.example;
+
+option go_package="./gen";
+
+service LolChampionService {
+  rpc ListChampions (ListChampionsRequest) returns (ListChampionsResponse);
+  rpc GetChampionStory (GetChampionStoryRequest) returns (GetChampionStoryResponse);
+  rpc GetChampionStats (GetChampionStatsRequest) returns (GetChampionStatsResponse);
+  rpc GetChampionSkills (GetChampionSkillsRequest) returns (GetChampionSkillsResponse);
+}
+
+// Requests {{{
+message ListChampionsRequest {
+}
+
+message GetChampionStoryRequest {
+  string champion_key = 1;
+}
+
+message GetChampionStatsRequest {
+  string champion_key = 1;
+}
+
+message GetChampionSkillsRequest {
+  string champion_key = 1;
+}
+// }}} Requests
+
+// Responses {{{
+message ListChampionsResponse {
+  message Champion {
+    string key = 1;
+    string name = 2;
+    string title = 3;
+    string profile_image_url = 4;
+    repeated string types = 5;
+  }
+  repeated Champion champions = 1;
+}
+
+message GetChampionStoryResponse {
+  string story = 1;
+  string background_image_url = 2;
+}
+
+message GetChampionStatsResponse {
+  message Stat {
+    string name = 1;
+    double base = 2;
+    oneof per_level {
+      double exact = 3;
+      double proportional = 4;
+    }
+  }
+  repeated Stat stats = 1;
+}
+
+message GetChampionSkillsResponse {
+  enum SpellType {
+    UNSPECIFIED = 0;
+    PASSIVE = 1;
+    ACTIVE_Q = 2;
+    ACTIVE_W = 3;
+    ACTIVE_E = 4;
+    ACTIVE_R = 5;
+  }
+
+  message SpellStat {
+    string name = 1;
+    repeated double values = 2;
+  }
+
+  message Spell {
+    string name = 1;
+    string description = 2;
+    string image_url = 3;
+    SpellType type = 4;
+    int32 max_level = 5;
+    repeated SpellStat stats = 6;
+  }
+
+  repeated Spell spells = 1;
+}
+// }}} Responses
